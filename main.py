@@ -1,4 +1,3 @@
-import sys
 import json
 
 from graphviz import Digraph
@@ -40,8 +39,7 @@ def main(specfile_path, focus):
     data = parse_specfile(specfile_path)
     for child, parent in record_relations(data):
 
-        if focus:
-            if focus not in (child, parent):
+        if focus and focus not in (child, parent):
                 continue
 
         graph.node(child)
@@ -49,9 +47,8 @@ def main(specfile_path, focus):
         graph.edge(parent, child)
 
     for target, origin, label in intra_record_relations(data):
-        if focus:
-            if focus not in (target, origin):
-                continue
+        if focus and focus not in (target, origin):
+            continue
         graph.edge(origin, target, label=label, color='red', fontcolor='red',)
 
     graph.render('graph')
